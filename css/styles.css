@@ -1,0 +1,361 @@
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+/* Header */
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px 30px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.tagline {
+    font-size: 1.1em;
+    opacity: 0.95;
+    font-style: italic;
+}
+
+/* Loading Screen */
+#loading-screen {
+    padding: 40px 30px;
+}
+
+/* Progress Bar */
+.progress-container {
+    margin-bottom: 30px;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 30px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    transition: width 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.progress-text {
+    text-align: center;
+    margin-top: 10px;
+    font-weight: 600;
+    color: #667eea;
+}
+
+/* Device Warning */
+.device-warning {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 15px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+}
+
+.device-warning p {
+    margin: 5px 0;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 15px 10px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+    color: #667eea;
+    background: #f5f5f5;
+}
+
+.tab-button.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-content h2 {
+    color: #667eea;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+
+/* Privacy Points */
+.privacy-points {
+    display: grid;
+    gap: 20px;
+}
+
+.privacy-point {
+    display: flex;
+    gap: 15px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #667eea;
+}
+
+.privacy-point .icon {
+    font-size: 2em;
+    flex-shrink: 0;
+}
+
+.privacy-point h3 {
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 1.2em;
+}
+
+.privacy-point p {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Music Player */
+.music-player {
+    text-align: center;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.music-info {
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    color: #666;
+}
+
+#music-player {
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+    display: block;
+}
+
+.music-credit {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #999;
+}
+
+/* Trivia */
+.trivia-question {
+    padding: 20px;
+}
+
+.trivia-question h3 {
+    color: #667eea;
+    margin-bottom: 20px;
+}
+
+.question-text {
+    font-size: 1.2em;
+    margin-bottom: 25px;
+    color: #333;
+    font-weight: 500;
+}
+
+.trivia-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.trivia-option {
+    padding: 15px;
+    background: #f8f9fa;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.trivia-option:hover {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+.trivia-option.correct {
+    background: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+.trivia-option.incorrect {
+    background: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+.trivia-feedback {
+    padding: 15px;
+    background: #e7f3ff;
+    border-left: 4px solid #667eea;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+/* Facts */
+.facts-container {
+    display: grid;
+    gap: 20px;
+}
+
+.fact-card {
+    display: flex;
+    gap: 20px;
+    padding: 25px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    border-left: 4px solid #764ba2;
+}
+
+.fact-icon {
+    font-size: 2.5em;
+    flex-shrink: 0;
+}
+
+.fact-card p {
+    line-height: 1.7;
+    color: #333;
+}
+
+.fact-card strong {
+    color: #667eea;
+}
+
+/* Analysis Screen */
+#analysis-screen {
+    padding: 40px 30px;
+}
+
+#analysis-screen h2 {
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+#playlist-input {
+    width: 100%;
+    min-height: 150px;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1em;
+    font-family: inherit;
+    margin: 20px 0;
+    resize: vertical;
+}
+
+#playlist-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.cta-button {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.2em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 1.8em;
+    }
+    
+    .tab-button {
+        font-size: 0.9em;
+        padding: 12px 5px;
+    }
+    
+    .trivia-options {
+        grid-template-columns: 1fr;
+    }
+}
