@@ -50,6 +50,6 @@ This project is being built by a non-technical person learning AI evaluation. Ea
 
 ---
 
-**Status:** 🟡 In Development | **Live Demo:** Coming Soon
+**Status:** 🟡 In Development | **Live Demo:** [View Here](https://nishandi.github.io/playlist-psychologist/)
 
 *Building in public - follow along as this evolves!*
