@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playlist Psychologist - AI Music Personality Analyzer</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="container">
+        
+        <!-- Header -->
+        <header>
+            <h1>🎵 Playlist Psychologist</h1>
+            <p class="tagline">Discovering the hidden patterns in your musical soul</p>
+        </header>
+
+        <!-- Loading Screen (shown initially) -->
+        <div id="loading-screen" class="active">
+            
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+                <p class="progress-text" id="progress-text">Loading AI model... 0%</p>
+            </div>
+
+            <!-- Device Warning (for slow devices) -->
+            <div class="device-warning" id="device-warning" style="display: none;">
+                <p>⏱️ <strong>Heads up!</strong> This may take 3-4 minutes on slower devices.</p>
+                <p>Why not explore the tabs below while you wait?</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+                <button class="tab-button active" data-tab="privacy">🔒 Privacy</button>
+                <button class="tab-button" data-tab="music">🎵 Music</button>
+                <button class="tab-button" data-tab="trivia">🎯 Trivia</button>
+                <button class="tab-button" data-tab="facts">💡 Facts</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content-container">
+                
+                <!-- Privacy Tab -->
+                <div class="tab-content active" id="privacy-tab">
+                    <h2>🔒 Your Privacy Matters</h2>
+                    <div class="privacy-points">
+                        <div class="privacy-point">
+                            <span class="icon">🏠</span>
+                            <div>
+                                <h3>100% Local Processing</h3>
+                                <p>Everything runs in your browser. Your music data never leaves your device.</p>
+                            </div>
+                        </div>
+                        <div class="privacy-point">
+                            <span class="icon">🚫</span>
+                            <div>
+                                <h3>No Servers. No APIs.</h3>
+                                <p>We don't have a backend. There's literally nowhere for your data to go.</p>
+                            </div>
+                        </div>
+                        <div class="privacy-point">
+                            <span class="icon">🔓</span>
+                            <div>
+                                <h3>Open Source</h3>
+                                <p>All code is public on GitHub. See exactly what we're doing.</p>
+                            </div>
+                        </div>
+                        <div class="privacy-point">
+                            <span class="icon">💰</span>
+                            <div>
+                                <h3>Free Forever</h3>
+                                <p>No ads. No premium tiers. No data selling. Just pure analysis.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Music Tab -->
+                <div class="tab-content" id="music-tab">
+                    <h2>🎵 Lo-Fi Beats While You Wait</h2>
+                    <div class="music-player">
+                        <p class="music-info">Relax with some chill instrumental music</p>
+                        <audio controls loop id="music-player">
+                            <source src="https://cdn.pixabay.com/audio/2022/05/13/audio_1808fbf07a.mp3" type="audio/mpeg">
+                            Your browser doesn't support audio playback.
+                        </audio>
+                        <p class="music-credit">🎼 Music: "Lofi Study" from Pixabay</p>
+                    </div>
+                </div>
+
+                <!-- Trivia Tab -->
+                <div class="tab-content" id="trivia-tab">
+                    <h2>🎯 Music Psychology Trivia</h2>
+                    <div class="trivia-container">
+                        <div class="trivia-question">
+                            <h3>Question 1 of 3</h3>
+                            <p class="question-text">What percentage of people experience "frisson" (goosebumps from music)?</p>
+                            <div class="trivia-options">
+                                <button class="trivia-option" data-correct="false">25%</button>
+                                <button class="trivia-option" data-correct="true">50%</button>
+                                <button class="trivia-option" data-correct="false">75%</button>
+                                <button class="trivia-option" data-correct="false">90%</button>
+                            </div>
+                            <p class="trivia-feedback" style="display: none;"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Facts Tab -->
+                <div class="tab-content" id="facts-tab">
+                    <h2>💡 Mind-Blowing Music Facts</h2>
+                    <div class="facts-container">
+                        <div class="fact-card">
+                            <span class="fact-icon">🧠</span>
+                            <p><strong>Your music taste crystallizes around age 14.</strong> Most people's favorite songs come from their early teens - it's when you're forming your identity!</p>
+                        </div>
+                        <div class="fact-card">
+                            <span class="fact-icon">💊</span>
+                            <p><strong>Music activates the same brain regions as drugs.</strong> Your favorite songs trigger dopamine release in the same pathway as food, sex, and substances.</p>
+                        </div>
+                        <div class="fact-card">
+                            <span class="fact-icon">😢</span>
+                            <p><strong>Sad music makes most people feel better.</strong> It provides emotional validation and catharsis - you're not weird for loving melancholic tunes!</p>
+                        </div>
+                        <div class="fact-card">
+                            <span class="fact-icon">🎭</span>
+                            <p><strong>Your playlist reveals your personality.</strong> Studies show music preferences predict traits like openness, empathy, and thinking style.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Analysis Screen (hidden initially) -->
+        <div id="analysis-screen" style="display: none;">
+            <h2>✨ Ready to Analyze Your Musical Mind</h2>
+            <p>Paste your music data below and let's discover patterns you didn't know existed...</p>
+            <textarea id="playlist-input" placeholder="Paste your Spotify playlist, top artists, or favorite songs here..."></textarea>
+            <button id="analyze-button" class="cta-button">Analyze My Music Soul</button>
+            <div id="results" style="display: none;">
+                <h3>Your Music Personality</h3>
+                <div id="analysis-output"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
