@@ -1,0 +1,358 @@
+{
+  "metadata": {
+    "evaluation_name": "Playlist Psychologist - Music Personality Analysis",
+    "prompt_version": "v3_optimized",
+    "model": "Claude 3.5 Sonnet",
+    "date_generated": "2024-01-15",
+    "evaluator": "Human expert review",
+    "total_examples_evaluated": 20,
+    "selection_criteria": "Representative sample across difficulty levels, categories, and edge cases",
+    "scoring_dimensions": [
+      "Mirror Accuracy (0-100%): Did AI correctly understand basic behavior",
+      "Insight Novelty (0-2 points): Did AI reveal new patterns",
+      "Actionability (0-2 points): Were recommendations specific and useful"
+    ]
+  },
+  "results": [
+    {
+      "example_id": 1,
+      "difficulty": "easy",
+      "category": "monoculture_fandom",
+      "input": "I only listen to Taylor Swift. Every album, every era, every deep cut. My Spotify Wrapped is literally 100% Taylor.",
+      "ai_response": {
+        "mirror": "You are a devoted Taylor Swift superfan with deep knowledge of her entire discography across all eras, from country beginnings through her recent releases.",
+        "pattern": "Your listening represents a parasocial relationship as emotional anchor - you're using Taylor's documented life journey and musical evolution as a framework to process your own experiences. Each album era likely corresponds to chapters in your personal life, creating a parallel narrative where her growth mirrors yours. This isn't just music consumption; it's using an artist's arc as scaffolding for your own identity development.",
+        "actions": "Journal: Map each Taylor era to a specific chapter in YOUR life. What was happening during your Red phase vs. your folklore phase? | Challenge: Explore artists with similar confessional songwriting but different sonic landscapes - try Phoebe Bridgers' 'Punisher' or Lucy Dacus' 'Home Video' | Serendipity: Deep-dive into Taylor's cited influences - Joni Mitchell's 'Blue' album shares the same emotional vulnerability"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "Strong response. Non-judgmental tone. Specific artist recommendations."
+      }
+    },
+    {
+      "example_id": 2,
+      "difficulty": "medium",
+      "category": "emotional_regulation",
+      "input": "Death metal and Chopin. That's it. Nothing in between.",
+      "ai_response": {
+        "mirror": "You exclusively listen to two extreme musical opposites - aggressive death metal and classical piano (Chopin) - with no middle-ground genres connecting them.",
+        "pattern": "This is intensity bipolarity serving emotional regulation through extremes. You're using death metal for cathartic release (externalizing aggression, processing anger) and Chopin for contemplative recovery (internal processing, emotional settling). You likely avoid medium-intensity music because it doesn't serve a clear psychological function - you need music to DO something specific, not just exist in the background.",
+        "actions": "Journal: Track which emotional states trigger death metal vs. Chopin. Are you using them to amplify existing moods or counteract them? | Challenge: Explore music that bridges the intensity gap - try apocalyptic classical like Shostakovich's Symphony No. 5 or melodic death metal like Insomnium | Serendipity: Chopin's Revolutionary Etude has death metal's fury channeled through piano"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "Excellent functional analysis. Specific bridge recommendations."
+      }
+    },
+    {
+      "example_id": 17,
+      "difficulty": "easy",
+      "category": "faith_based",
+      "input": "Christian worship music only. It's not just preference - secular music feels spiritually dangerous.",
+      "ai_response": {
+        "mirror": "You exclusively listen to Christian worship music for religious reasons, viewing secular music as potentially spiritually harmful or compromising to your faith.",
+        "pattern": "This represents faith-based boundary maintenance where music filtering becomes a spiritual practice. The 'spiritually dangerous' framing suggests you've either had personal experiences that reinforced this boundary, or you've been taught that secular music poses genuine spiritual risk. Your taste is intertwined with your religious identity and possibly community expectations.",
+        "actions": "Journal: Reflect on whether this boundary comes from personal conviction or external teaching | Challenge: If curious about diversity within faith framework, explore Christian artists who blend genres - Sufjan Stevens, Chance the Rapper | Serendipity: Explore sacred music across Christian traditions - Gregorian chants, Gospel, contemporary hymn writers"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 1,
+        "actionability": 2,
+        "notes": "Appropriately respectful of faith boundaries while offering exploration."
+      }
+    },
+    {
+      "example_id": 4,
+      "difficulty": "medium",
+      "category": "nostalgia",
+      "input": "90s nostalgia trap. Backstreet Boys, Britney, NSYNC, Christina. I know it's cheesy but I don't care. Takes me back to simpler times.",
+      "ai_response": {
+        "mirror": "You primarily listen to late-90s/early-2000s pop music for nostalgic reasons, fully aware it's culturally considered 'cheesy' but embracing it anyway.",
+        "pattern": "This is temporal refuge - you're using music as an emotional time machine to a period you've idealized. The phrase 'simpler times' suggests current life complexity or stress that you're seeking relief from. Your defensive 'I don't care' reveals you're aware others judge this choice, indicating you've internalized some criticism but are pushing back against it.",
+        "actions": "Journal: Get specific about what was 'simpler' then. What current complexity are you escaping? | Challenge: Find NEW music that captures the joy and energy of that era without nostalgia weight - try Carly Rae Jepsen's 'Emotion' or Dua Lipa's 'Future Nostalgia' | Serendipity: Explore what 90s teens considered 'old people music' - you might connect with 70s disco for similar reasons"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "Empathetic while gently challenging comfort zone."
+      }
+    },
+    {
+      "example_id": 15,
+      "difficulty": "medium",
+      "category": "comfort_rigidity",
+      "input": "I listen to the same 20 songs on repeat. Have for years. I know every word, every beat. Adding new music feels overwhelming.",
+      "ai_response": {
+        "mirror": "You maintain a small, unchanging rotation of approximately 20 songs that you've listened to for years, with comprehensive knowledge of every detail.",
+        "pattern": "This is a comfort loop with novelty anxiety. You've created a predictable emotional environment where music never surprises you, which suggests either high need for control or genuine overwhelm from choice paralysis. The word 'overwhelming' is key - this isn't laziness, it's anxiety. New music might represent unpredictability, emotional risk, or the effort of building new associations.",
+        "actions": "Journal: What would new music threaten? What do these 20 songs provide that new music can't? | Challenge: Try gradual exposure - add ONE song per month that's similar to your existing 20. This is exposure therapy for music anxiety | Serendipity: Use 'similar artists' features - these offer new music with minimal risk"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "Recognizes anxiety without pathologizing. Therapeutic approach."
+      }
+    },
+    {
+      "example_id": 20,
+      "difficulty": "medium",
+      "category": "grief",
+      "input": "My ex made me a playlist once. I still listen to it every day even though we broke up 2 years ago. Can't let it go.",
+      "ai_response": {
+        "mirror": "You repeatedly listen to a playlist created by your ex-partner, maintaining this habit two years after the relationship ended, and recognize you're unable to stop.",
+        "pattern": "This playlist has become an emotional artifact - a grief object you're preserving. You're either still processing the loss OR actively avoiding closure. The 'can't let it go' language suggests you're aware this might be unhealthy but feel powerless to change it. The playlist represents more than music - it's the last tangible piece of that relationship you can control and revisit.",
+        "actions": "Journal: Are you honoring good memories or avoiding moving on? What would deleting this playlist mean? | Challenge: Create a NEW playlist that captures who YOU are now, post-relationship. Reclaim your musical identity separate from them | Serendipity: Read about 'continuing bonds' theory in grief - sometimes keeping connections is healing, not pathological"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "Compassionate and therapeutic without overstepping boundaries."
+      }
+    },
+    {
+      "example_id": 34,
+      "difficulty": "medium",
+      "category": "neurodivergent",
+      "input": "I have ADHD. I listen to the same song on repeat for 8 hours straight when I'm hyperfocused, then never want to hear it again.",
+      "ai_response": {
+        "mirror": "You have ADHD and experience intense hyperfocus periods where you listen to a single song repeatedly for extended periods, followed by complete abandonment of that song.",
+        "pattern": "This is hyperfocus cycling with dopamine regulation - your brain latches onto songs that provide optimal stimulation, extracts every bit of dopamine from them through repetition, then discards them once novelty wears off. This isn't indecisiveness - it's how your ADHD brain seeks and exhausts stimulation sources. The repetition serves a regulation function during hyperfocus, not aesthetic appreciation.",
+        "actions": "Journal: Track WHICH songs trigger hyperfocus - is there a pattern in BPM, complexity, emotional tone? | Challenge: Create a 'burned songs graveyard' playlist and revisit in 6 months - test if songs can be recovered | Serendipity: Explore ADHD-friendly music - binaural beats, lo-fi hip hop streams, brown noise engineered for sustained focus"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "Exceptional. Validates neurodivergent experience with neurological accuracy."
+      }
+    },
+    {
+      "example_id": 51,
+      "difficulty": "medium",
+      "category": "functional",
+      "input": "My Spotify Wrapped was literally just video game soundtracks and lo-fi beats. Nothing with lyrics. My friends think I'm boring but I just can't focus with words. I'm in grad school and music with lyrics makes me feel like someone's talking to me when I need silence.",
+      "ai_response": {
+        "mirror": "You listen exclusively to instrumental music (video game soundtracks, lo-fi beats) to support focus during demanding graduate school work, with friends judging this as 'boring.'",
+        "pattern": "This is lyrical interference sensitivity - you experience vocals as cognitive disruption rather than entertainment. When you're doing linguistic work (reading, writing), lyrical music competes for the same brain resources, creating mental noise. Your 'boring' music is actually cognitively optimized for your needs. The defensiveness reveals social pressure to enjoy music 'normally.'",
+        "actions": "Journal: Test whether you avoid lyrics ONLY while studying or also during leisure. If study-specific, this is functional adaptation | Challenge: Experiment with different instrumental genres for different tasks - ambient for writing, upbeat electronic for problem-solving | Serendipity: Try Brain.fm (neuroscience-based focus music) or classical minimalism (Philip Glass, Steve Reich)"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "Excellent validation of functional needs vs social expectations."
+      }
+    },
+    {
+      "example_id": 61,
+      "difficulty": "medium",
+      "category": "identity",
+      "input": "I'm a metalhead but my Spotify Wrapped was 80% Carly Rae Jepsen. I discovered her album 'Emotion' in June and haven't stopped. I've been going to metal shows for 15 years. I feel like I'm having an identity crisis. Do I have to turn in my metalhead card?",
+      "ai_response": {
+        "mirror": "You're a long-time metal fan (15 years of shows, established identity) who recently became obsessed with pop music (Carly Rae Jepsen), experiencing confusion about your musical identity.",
+        "pattern": "This is genre defection anxiety - you've discovered joy in music that contradicts your curated social identity. The 'turn in my metalhead card' language reveals your identity is performative, tied to taste signaling within a community that polices authenticity. True metalheads listen to what they love. Your discomfort isn't about music quality; it's about social belonging and self-imposed authenticity standards.",
+        "actions": "Journal: What does metal provide that pop doesn't, and vice versa? They're not enemies - aggression and joy are both valid | Challenge: Explore the overlap - Devin Townsend loves ABBA, Poppy blends both worlds | Serendipity: Make a transition playlist from metal → pop gradually. Genre boundaries are artificial"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "Empowering. Challenges rigid identity while validating both tastes."
+      }
+    },
+    {
+      "example_id": 76,
+      "difficulty": "medium",
+      "category": "physiological",
+      "input": "I need exactly 180 BPM for running or my entire pace falls apart. I've built a playlist that's ALL 180 BPM - across different genres but same exact tempo. If a song is 175 or 185 I cannot use it. My body has calibrated to that specific beat and now I can't run without it.",
+      "ai_response": {
+        "mirror": "You require precisely 180 BPM music for running and have physically calibrated your pace to that exact tempo, experiencing performance decline without it.",
+        "pattern": "This is physiological entrainment with tempo dependency - you've trained your body's rhythm to an external beat, which is scientifically documented (music as pacemaker). This is sophisticated optimization, but you've created brittleness - your system now requires this input. The 'tempo prisoner' self-awareness is accurate: optimization created vulnerability.",
+        "actions": "Journal: Test if it's ACTUALLY 180 or if there's flexibility - have a friend create a 178-182 playlist blindly | Challenge: Run ONE session in silence - test if pace truly collapses or if discomfort is psychological | Serendipity: Research entrainment science - you're using proven technique. But build backup skills for when technology fails"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "Great balance of validating optimization while addressing vulnerability."
+      }
+    },
+    {
+      "example_id": 79,
+      "difficulty": "medium",
+      "category": "spatial",
+      "input": "I only listen to music in the car. Like ONLY in the car. At home I need silence. At work I need silence. But the second I get in my car I NEED music loud. It's like the car is my music chamber.",
+      "ai_response": {
+        "mirror": "You exclusively listen to music in your car with high volume, requiring silence in all other contexts (home, work), creating a single-use 'music chamber.'",
+        "pattern": "This is spatial music compartmentalization with contextual activation. Your car serves as liminal space - the transition zone between roles (work self → home self), and music becomes the ritual that marks this transition. You likely use drive time for emotional processing or decompression that other contexts don't allow. The car offers unique conditions: privacy, enclosure, control.",
+        "actions": "Journal: What does car music provide? Is it processing stress, creating energy shift, or the only time you're truly alone? | Challenge: Try recreating car conditions at home - headphones, eyes closed, private space. Test if it's the CAR or the conditions | Serendipity: Read about liminal spaces and transition rituals - many people use commutes for emotional regulation"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "Excellent functional analysis. Validates unusual pattern with research."
+      }
+    },
+    {
+      "example_id": 85,
+      "difficulty": "medium",
+      "category": "relationship",
+      "input": "I'm in a long-distance relationship and we have a shared playlist that we both add to. It's like our love language. When I see she added a song I listen immediately to understand what she's feeling. We've never actually SAID this is what we're doing but the playlist is how we communicate emotions we can't text.",
+      "ai_response": {
+        "mirror": "You maintain a shared playlist with your long-distance partner that functions as an emotional communication channel, where song additions convey feelings that text can't express.",
+        "pattern": "This is musical code-switching with asynchronous intimacy - you've created a shared symbolic language where songs carry emotional messages. This is beautiful adaptation to distance: music becomes the conversation you can't have in person. The fact that it evolved organically makes it more meaningful - it's an intuitive intimacy ritual you both understand without explicit rules.",
+        "actions": "Journal: Have you explicitly ASKED if she's using it the same way, or are you projecting? Clarifying might deepen the practice | Challenge: Try adding a song WITH a note explaining why - make the implicit explicit once. See if naming enhances or diminishes the magic | Serendipity: Read about 'ambient intimacy' - maintaining connection through low-effort, high-meaning gestures"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 1,
+        "notes": "Beautiful analysis. Challenge might disrupt what works (slightly risky suggestion)."
+      }
+    },
+    {
+      "example_id": 92,
+      "difficulty": "medium",
+      "category": "identity_trans",
+      "input": "I'm trans and I can't listen to music I loved pre-transition. Those songs are connected to a person I'm not anymore. It's like they belong to my deadname. I've had to completely rebuild my music taste from scratch. My Spotify literally has a BEFORE and AFTER.",
+      "ai_response": {
+        "mirror": "You're transgender and experience pre-transition music as connected to your former identity, requiring complete taste reconstruction as part of your transition journey.",
+        "pattern": "This is identity reconstruction with musical dissociation - music is deeply intertwined with self-concept, so gender transition naturally necessitates taste transition. The 'deadname' framing is powerful: those songs address someone who no longer exists. This isn't rejection of music quality; it's shedding identity artifacts that don't fit your authentic self. Your Spotify's BEFORE/AFTER represents your life in two chapters.",
+        "actions": "Journal: Is ANY pre-transition music reclaimable, or does it all belong to the past? Some trans people eventually reclaim with new meaning; others keep that boundary. Both valid | Challenge: Explore music BY trans artists (SOPHIE, Arca, Laura Jane Grace, Ethel Cain) | Serendipity: Consider what music would 'bridge' both identities - songs about transformation might help integrate the journey"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "Exceptional sensitivity. Honors boundary while offering possibility without pressure."
+      }
+    },
+    {
+      "example_id": 97,
+      "difficulty": "medium",
+      "category": "disability",
+      "input": "I'm blind and I experience music completely differently than sighted people. I can't connect songs to visual memories or music videos. My associations are all tactile, spatial, emotional. People describe music as 'colorful' or 'bright' and I have no idea what that means.",
+      "ai_response": {
+        "mirror": "You're blind and process music through non-visual senses (tactile, spatial, emotional), questioning whether this represents a deficit or a different form of musical experience.",
+        "pattern": "This is non-visual music cognition with sensory compensation - you process music through available senses, which isn't limitation but difference. The 'more purely' question is profound: visual associations might actually DISTRACT from sonic experience. You might notice elements sighted people miss - spatial audio, textural details, vibrational patterns - precisely because you're not visually distracted. Your experience isn't incomplete; it's differently complete.",
+        "actions": "Journal: Document YOUR musical associations - what tactile/spatial/emotional connections do you make? They're as valid as visual ones | Challenge: Ask sighted friends to describe what they 'see' - you might discover their descriptions are metaphorical, not literal | Serendipity: Research blind musicians (Stevie Wonder, Ray Charles, Andrea Bocelli) - many credit blindness with heightened perception. Explore spatial audio (Dolby Atmos)"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "Exceptional. Avoids ableist framing while offering genuine resources."
+      }
+    },
+    {
+      "example_id": 19,
+      "difficulty": "hard",
+      "category": "medical",
+      "input": "I don't listen to music. Never have. People think I'm weird but I just don't get the appeal.",
+      "ai_response": {
+        "mirror": "You don't listen to music and never have, experiencing confusion about why others find it appealing.",
+        "pattern": "This is likely musical anhedonia - a rare neurological condition (3-5% of population) where music doesn't trigger the typical pleasure response. This isn't a preference or problem to fix - it's how you're wired. You probably enjoy other pleasures normally, but music specifically doesn't activate your reward system. This is documented in neuroscience. Not a moral failing, just neurologically different.",
+        "actions": "Journal: Do you feel ANYTHING when music plays (annoyance, neutrality, intellectual appreciation)? | Challenge: There's no 'challenge' here because this isn't something to overcome. If curious, you could explore music WITH other pleasures - live concerts for social experience. But you don't owe music enjoyment to anyone | Serendipity: Read research on musical anhedonia (Robert Zatorre, Psyche Loui). Some brilliant people share this trait (Chuck Close). You're not broken"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "Perfect. Recognizes when NOT to recommend music. Validates difference."
+      }
+    },
+    {
+      "example_id": 53,
+      "difficulty": "hard",
+      "category": "ambiguous",
+      "input": "I have like 47 playlists all titled things like 'sad but make it aesthetic' and 'crying in the shower vibes' and 'depressed but chic'. My therapist asked if I was okay after seeing my Spotify. I AM okay though? I just like sad music. It's not that deep.",
+      "ai_response": {
+        "mirror": "You curate many playlists with depression-themed titles, prompting concern from your therapist, though you insist you're mentally healthy and just enjoy sad music.",
+        "pattern": "This situation has ambiguity that can't be resolved remotely - you're either romanticizing sadness as aesthetic identity (Gen Z's 'depression chic' culture) OR using humor to deflect from genuine struggles. Your therapist's concern combined with your 'not that deep' dismissal creates a question mark. The 'I AM okay though?' with a question mark is telling - you're asking, not stating.",
+        "actions": "Journal: Honest check - is sad music a safe space to PROCESS feelings, or to PRESERVE them? If you were suddenly happy, would you feel lost? | Challenge: Create ONE playlist with positive title - notice your resistance. Does it feel fake or just unfamiliar? | Serendipity: Read about 'sad girl aesthetic' critically - sometimes it's valid expression, sometimes performative, sometimes real depression masked. Your therapist might see something you're too close to see"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 1,
+        "notes": "Appropriately uncertain. Doesn't diagnose, doesn't dismiss concern. Good balance."
+      }
+    },
+    {
+      "example_id": 86,
+      "difficulty": "hard",
+      "category": "psychological",
+      "input": "I have a playlist I call 'Songs I'm Not Ready to Hear Yet.' It's all music that's too emotionally intense for where I'm at in life. Someday I'll be ready for them but not now. It's like a time capsule of emotional maturity I haven't reached yet.",
+      "ai_response": {
+        "mirror": "You maintain a playlist of songs you consider too emotionally intense for your current life stage, treating it as a deferred engagement time capsule.",
+        "pattern": "This is deferred emotional engagement with future-self curation - you're practicing extraordinary self-awareness by recognizing emotional capacity limits. The playlist is both protective ('not now') and aspirational ('someday'). This suggests emotional intelligence BUT possibly avoidance. The critical question: are you protecting yourself from overwhelm, or procrastinating necessary emotional work?",
+        "actions": "Journal: What SPECIFICALLY makes you 'not ready'? Name the emotions you're avoiding. Sometimes articulating the fear reduces its power | Challenge: Listen to ONE song in maximally safe context (literally in your therapist's office, or with trusted friend). Test if fear matches reality | Serendipity: This is intuitively creating an 'exposure hierarchy' from CBT. Your therapist is right to be fascinated. The playlist might be your unconscious telling you what to process next"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "Sophisticated analysis. Respects boundary while suggesting it might be testable."
+      }
+    },
+    {
+      "example_id": 96,
+      "difficulty": "hard",
+      "category": "clinical_ocd",
+      "input": "I have OCD and I MUST listen to songs in multiples of 3. If I hear a song twice I compulsively need to play it a third time or I spiral into anxiety. My playlists have to be exactly 9, 12, 15, or 18 songs. I know it's irrational but I cannot stop.",
+      "ai_response": {
+        "mirror": "You have OCD manifesting as compulsive music listening patterns requiring multiples of three, causing significant distress and loss of enjoyment.",
+        "pattern": "This is clinical OCD (not a quirk) where music has been absorbed into your compulsion system. The 'I know it's irrational but I cannot stop' is textbook OCD insight - you recognize the illogic but can't override the compulsion. Music is now functioning as anxiety-reduction ritual rather than pleasure source. This requires professional intervention.",
+        "actions": "This requires professional help, not music recommendations. OCD responds to Exposure and Response Prevention (ERP) therapy, which is the gold standard treatment. Do not attempt self-guided exposure - OCD treatment requires professional guidance to avoid reinforcing compulsions. Resources: International OCD Foundation (iocdf.org) has therapist directories. Your music compulsion is treatable."
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "PERFECT graceful failure. Doesn't give music advice, recognizes clinical boundary, provides help route."
+      }
+    },
+    {
+      "example_id": 100,
+      "difficulty": "hard",
+      "category": "clinical_dementia",
+      "input": "I'm 78 years old with early dementia. Music is the only thing I can still remember clearly. I've forgotten my grandchildren's names but I know every word to songs from 1965. My daughter plays my old records and I come ALIVE. Music is my last connection to who I was.",
+      "ai_response": {
+        "mirror": "You're elderly with early dementia, experiencing music as your sole remaining clear memory and primary connection to your identity.",
+        "pattern": "This reflects how music memory is uniquely preserved in dementia - it's stored differently (procedural and emotional memory) compared to episodic memory (names, recent events). Your 'last connection to who I was' is neurologically accurate: music accesses self when other memories fail. Research shows music therapy helps dementia patients maintain identity and stay connected to loved ones.",
+        "actions": "Your daughter is doing exactly the right thing. Continue with familiar music from your formative years. Consider recording: while you still can, record yourself talking ABOUT these songs - what they meant, memories attached. Future you might lose words but keep music. This isn't a problem to solve. Music holding you here is beautiful. Resources for your daughter: Alzheimer's Association has music therapy guidance. 'Alive Inside' documentary shows music's power for dementia patients."
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "PERFECT graceful response. Doesn't try to 'fix,' honors sacredness, provides family support."
+      }
+    },
+    {
+      "example_id": 14,
+      "difficulty": "easy",
+      "category": "temporal",
+      "input": "I only listen to music from 1960-1979. Nothing modern sounds good. Music died after the 70s.",
+      "ai_response": {
+        "mirror": "You exclusively listen to music from the 1960s-1970s and believe modern music is inferior, viewing that era as music's peak.",
+        "pattern": "This is temporal elitism with generational anchoring - you've frozen your taste at a specific era, likely corresponding to your formative years. The 'music died' absolutism suggests either genuine aesthetic preference OR resistance to learning new musical languages. Neuroscience shows musical taste crystallizes during adolescence (ages 12-22), so if the 70s were YOUR formative years, this isn't stubbornness - it's neurological. Every generation does this.",
+        "actions": "Journal: WHEN did you decide modern music was bad? What was happening in your life? | Challenge: Try modern artists clearly influenced by 70s music - Khruangbin (70s Thai psych-rock), Tame Impala (60s production), Greta Van Fleet | Serendipity: Research what 70s teens said about 50s music - you'll see the exact same 'music died' complaints. This is generational pattern, not objective truth"
+      },
+      "scores": {
+        "mirror_accuracy": 100,
+        "novelty": 2,
+        "actionability": 2,
+        "notes": "Respectful while gently challenging rigidity. Good balance."
+      }
+    }
+  ]
+}
