@@ -8,6 +8,8 @@ env.useBrowserCache = true;
 // Global state
 let generator = null;
 let modelLoaded = false;
+// Cloudflare Worker URL
+const WORKER_URL = 'https://spotify-scraper.i-nidhivaid.workers.dev';
 const ratings = {
     mirror: null,
     novelty: null,
@@ -125,91 +127,57 @@ async function loadModel() {
     }
 }
 
-// Extract Spotify playlist ID from URL
-function extractPlaylistId(url) {
-    const regex = /playlist\/([a-zA-Z0-9]+)/;
-    const match = url.match(regex);
-    return match ? match[1] : null;
-}
-
-// Fetch Spotify playlist data (public playlists only, no auth)
-async function fetchPlaylistData(playlistId) {
+// Fetch Spotify playlist data using Cloudflare Worker
+async function fetchPlaylistData(playlistId, fullUrl) {
     try {
-        // Note: This is a simplified approach for public playlists
-        // For production, you'd need proper Spotify API integration
-        const response = await fetch(`https://open.spotify.com/embed/playlist/${playlistId}`);
+        // Call our Cloudflare Worker
+        const response = await fetch(`${WORKER_URL}/playlist/${playlistId}`);
         
         if (!response.ok) {
-            throw new Error('Playlist not found or not public');
+            throw new Error('Could not fetch playlist data');
         }
         
-        // For demo purposes, we'll use a simplified extraction
-        // In production, this would parse the embed data or use Spotify API
+        const data = await response.json();
+        
+        if (!data.success) {
+            throw new Error(data.error || 'Unknown error');
+        }
+        
         return {
             success: true,
             playlistId: playlistId,
-            // Placeholder data structure
-            tracks: [],
-            artists: [],
-            genres: []
+            name: data.name,
+            tracks: data.tracks,
+            artists: data.artists,
+            trackCount: data.trackCount,
+            fullUrl: fullUrl
         };
         
     } catch (error) {
         console.error('Error fetching playlist:', error);
-        return { success: false, error: error.message };
+        return { 
+            success: false, 
+            error: error.message 
+        };
     }
 }
 
 // Format playlist data for AI analysis
 function formatPlaylistForAI(playlistData) {
-    // This would format the actual playlist data
-    // For now, returning a template
-    return `Spotify Playlist Analysis Request:
-Playlist ID: ${playlistData.playlistId}
-[Playlist data would be formatted here]`;
-}
-
-// Generate AI analysis
-async function analyzeMusic(inputText) {
-    if (!modelLoaded || !generator) {
-        // Demo mode: return pre-generated response
-        return generateDemoResponse(inputText);
+    let formatted = `Analyzing Spotify Playlist: "${playlistData.name}"\n\n`;
+    
+    if (playlistData.artists && playlistData.artists.length > 0) {
+        formatted += `Top Artists: ${playlistData.artists.slice(0, 15).join(', ')}\n\n`;
     }
-
-    const prompt = `You are analyzing music listening patterns. Provide:
-
-1. MIRROR (2-3 sentences): Accurately reflect what they already know about themselves
-2. HIDDEN PATTERN (3-4 sentences): Reveal psychological insight they haven't named
-3. ACTIONABLE STEPS (3 specific suggestions):
-   - Journal prompt (reflection question)
-   - Challenge (new music behavior to try)
-   - Serendipity pick (specific artist/album recommendation)
-
-Guidelines:
-- Avoid judgment
-- Recognize clinical issues - defer to professionals when appropriate
-- Validate neurodivergent patterns as neurological differences
-- Be specific in recommendations
-
-User's music data: ${inputText}
-
-Provide analysis in the 3 sections above.`;
-
-    try {
-        const output = await generator(prompt, {
-            max_new_tokens: 300,
-            temperature: 0.7,
-            do_sample: true,
-        });
-
-        return parseAIResponse(output[0].generated_text);
-        
-    } catch (error) {
-        console.error('Error generating analysis:', error);
-        return generateDemoResponse(inputText);
+    
+    if (playlistData.tracks && playlistData.tracks.length > 0) {
+        formatted += `Sample Tracks: ${playlistData.tracks.slice(0, 20).join(', ')}\n\n`;
     }
+    
+    formatted += `Total tracks: ${playlistData.trackCount || 'Unknown'}`;
+    
+    return formatted;
 }
-
 // Parse AI response into structured format
 function parseAIResponse(text) {
     // Simple parsing logic
