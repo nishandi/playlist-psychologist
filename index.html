@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <!-- Main Container -->
     <div class="container">
         
         <!-- Header -->
@@ -23,12 +22,14 @@
             <div class="progress-container">
                 <div class="progress-bar" id="progress-bar"></div>
                 <p class="progress-text" id="progress-text">Loading AI model... 0%</p>
+                <p class="progress-subtext" id="progress-subtext">Downloading Phi-2 (2.7B parameters)...</p>
             </div>
 
-            <!-- Device Warning (for slow devices) -->
-            <div class="device-warning" id="device-warning" style="display: none;">
-                <p>⏱️ <strong>Heads up!</strong> This may take 3-4 minutes on slower devices.</p>
-                <p>Why not explore the tabs below while you wait?</p>
+            <!-- Device Warning -->
+            <div class="device-warning" id="device-warning">
+                <p>⏱️ <strong>First-time load:</strong> This may take 2-4 minutes while we download the AI model (1.6GB).</p>
+                <p>💡 <strong>Why the wait?</strong> We're loading a complete AI model into your browser so your data never leaves your device!</p>
+                <p>☕ <strong>Grab a coffee</strong> and explore the tabs below while you wait...</p>
             </div>
 
             <!-- Tab Navigation -->
@@ -50,28 +51,28 @@
                             <span class="icon">🏠</span>
                             <div>
                                 <h3>100% Local Processing</h3>
-                                <p>Everything runs in your browser. Your music data never leaves your device.</p>
+                                <p>Everything runs in your browser using Phi-2 (Microsoft's 2.7B parameter model). Your playlist data never leaves your device.</p>
                             </div>
                         </div>
                         <div class="privacy-point">
                             <span class="icon">🚫</span>
                             <div>
                                 <h3>No Servers. No APIs.</h3>
-                                <p>We don't have a backend. There's literally nowhere for your data to go.</p>
+                                <p>We don't have a backend. We only read public Spotify playlist data (no login required). Your analysis is private.</p>
                             </div>
                         </div>
                         <div class="privacy-point">
                             <span class="icon">🔓</span>
                             <div>
                                 <h3>Open Source</h3>
-                                <p>All code is public on GitHub. See exactly what we're doing.</p>
+                                <p>All code is public on GitHub. See exactly what we're doing. No tracking, no analytics.</p>
                             </div>
                         </div>
                         <div class="privacy-point">
                             <span class="icon">💰</span>
                             <div>
                                 <h3>Free Forever</h3>
-                                <p>No ads. No premium tiers. No data selling. Just pure analysis.</p>
+                                <p>No ads. No premium tiers. No data selling. This is a portfolio project demonstrating AI evaluation.</p>
                             </div>
                         </div>
                     </div>
@@ -134,20 +135,120 @@
             </div>
         </div>
 
-        <!-- Analysis Screen (hidden initially) -->
-        <div id="analysis-screen" style="display: none;">
+        <!-- Input Screen (shown after loading) -->
+        <div id="input-screen" style="display: none;">
             <h2>✨ Ready to Analyze Your Musical Mind</h2>
-            <p>Paste your music data below and let's discover patterns you didn't know existed...</p>
-            <textarea id="playlist-input" placeholder="Paste your Spotify playlist, top artists, or favorite songs here..."></textarea>
-            <button id="analyze-button" class="cta-button">Analyze My Music Soul</button>
-            <div id="results" style="display: none;">
-                <h3>Your Music Personality</h3>
-                <div id="analysis-output"></div>
+            
+            <div class="input-options">
+                <div class="input-method active" data-method="playlist">
+                    <h3>📋 Option 1: Paste Spotify Playlist Link</h3>
+                    <p>Share a public playlist that represents your taste</p>
+                    <input type="text" id="playlist-url" placeholder="https://open.spotify.com/playlist/..." />
+                    <button id="analyze-playlist-btn" class="cta-button">Analyze Playlist</button>
+                    <p class="input-note">⚠️ Playlist must be public. We only read track/artist data (no login needed).</p>
+                </div>
+
+                <div class="input-divider">
+                    <span>OR</span>
+                </div>
+
+                <div class="input-method" data-method="manual">
+                    <h3>✍️ Option 2: Describe Your Music Taste</h3>
+                    <p>Tell us about your favorite artists, genres, or listening habits</p>
+                    <textarea id="manual-input" placeholder="Example: I mostly listen to indie folk (Bon Iver, Fleet Foxes) and some electronic (Bonobo, Tycho). I like music with emotional depth and interesting production..."></textarea>
+                    <button id="analyze-manual-btn" class="cta-button">Analyze Description</button>
+                </div>
+            </div>
+
+            <div class="example-link">
+                <p>🎯 <strong>Try an example:</strong> <a href="#" id="load-example">Click here</a> to load a sample playlist</p>
+            </div>
+        </div>
+
+        <!-- Analyzing Screen -->
+        <div id="analyzing-screen" style="display: none;">
+            <div class="analyzing-animation">
+                <div class="spinner"></div>
+                <h2>🎵 Analyzing Your Musical Soul...</h2>
+                <p id="analyzing-status">Reading playlist data...</p>
+                <p class="analyzing-subtext">This takes 30-60 seconds</p>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" style="display: none;">
+            <h2>🎭 Your Music Personality Analysis</h2>
+            
+            <div class="result-section">
+                <div class="result-header">
+                    <span class="result-icon">🪞</span>
+                    <h3>Mirror: What You Already Know</h3>
+                </div>
+                <div class="result-content" id="mirror-content"></div>
+            </div>
+
+            <div class="result-section highlight">
+                <div class="result-header">
+                    <span class="result-icon">💡</span>
+                    <h3>Hidden Pattern: The Aha Moment</h3>
+                </div>
+                <div class="result-content" id="pattern-content"></div>
+            </div>
+
+            <div class="result-section">
+                <div class="result-header">
+                    <span class="result-icon">✨</span>
+                    <h3>Actionable Steps: What To Try</h3>
+                </div>
+                <div class="result-content" id="actions-content"></div>
+            </div>
+
+            <!-- Rating UI -->
+            <div class="rating-section">
+                <h3>📊 Rate This Analysis</h3>
+                <p>Help us improve! Your ratings are stored locally (private).</p>
+
+                <div class="rating-dimension">
+                    <h4>Mirror Accuracy: Did we understand your taste?</h4>
+                    <div class="rating-options">
+                        <button class="rating-btn" data-dimension="mirror" data-value="3">😍 Perfect</button>
+                        <button class="rating-btn" data-dimension="mirror" data-value="2">😊 Mostly</button>
+                        <button class="rating-btn" data-dimension="mirror" data-value="1">😐 Somewhat</button>
+                        <button class="rating-btn" data-dimension="mirror" data-value="0">😞 Missed</button>
+                    </div>
+                </div>
+
+                <div class="rating-dimension">
+                    <h4>Insight Novelty: Did we reveal something new?</h4>
+                    <div class="rating-options">
+                        <button class="rating-btn" data-dimension="novelty" data-value="2">💡 Big Aha!</button>
+                        <button class="rating-btn" data-dimension="novelty" data-value="1">🤔 Mild Insight</button>
+                        <button class="rating-btn" data-dimension="novelty" data-value="0">😑 Nothing New</button>
+                    </div>
+                </div>
+
+                <div class="rating-dimension">
+                    <h4>Actionability: Are recommendations useful?</h4>
+                    <div class="rating-options">
+                        <button class="rating-btn" data-dimension="actionability" data-value="2">✅ Definitely</button>
+                        <button class="rating-btn" data-dimension="actionability" data-value="1">🤷 Maybe</button>
+                        <button class="rating-btn" data-dimension="actionability" data-value="0">❌ Not Really</button>
+                    </div>
+                </div>
+
+                <div class="rating-feedback">
+                    <label for="feedback-text">What surprised you most? (optional)</label>
+                    <textarea id="feedback-text" placeholder="Share your thoughts..."></textarea>
+                </div>
+
+                <button id="submit-rating-btn" class="cta-button">Submit Rating</button>
+                <button id="try-another-btn" class="secondary-button">Try Another Playlist</button>
             </div>
         </div>
 
     </div>
 
-    <script src="js/app.js"></script>
+    <!-- Load Transformers.js from CDN -->
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
