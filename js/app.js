@@ -1,113 +1,89 @@
-// Import Transformers.js from CDN
-import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1';
+// Playlist Psychologist - Main Application
+// Uses Gemini API for analysis + Google Sheets for ratings storage
 
-// Configure environment
-env.allowLocalModels = false;
-env.useBrowserCache = true;
-
-// Cloudflare Worker URL
-const WORKER_URL = 'https://spotify-scraper.i-nidhivaid.workers.dev';
+// Wait for config to load
+if (!window.CONFIG) {
+    console.error('Config not loaded!');
+}
 
 // Global state
-let generator = null;
-let modelLoaded = false;
-const ratings = {
-    mirror: null,
-    novelty: null,
-    actionability: null,
-    feedback: ''
+const state = {
+    currentAnalysis: null,
+    ratings: {
+        mirror: null,
+        novelty: null,
+        actionability: null,
+        feedback: ''
+    }
 };
 
 // DOM elements
-const loadingScreen = document.getElementById('loading-screen');
-const inputScreen = document.getElementById('input-screen');
-const analyzingScreen = document.getElementById('analyzing-screen');
-const resultsScreen = document.getElementById('results-screen');
-const progressBar = document.getElementById('progress-bar');
-const progressText = document.getElementById('progress-text');
-const progressSubtext = document.getElementById('progress-subtext');
+const screens = {
+    loading: document.getElementById('loading-screen'),
+    input: document.getElementById('input-screen'),
+    analyzing: document.getElementById('analyzing-screen'),
+    results: document.getElementById('results-screen')
+};
 
-// Tab switching
-const tabButtons = document.querySelectorAll('.tab-button');
-const tabContents = document.querySelectorAll('.tab-content');
+const elements = {
+    playlistUrl: document.getElementById('playlist-url'),
+    manualInput: document.getElementById('manual-input'),
+    analyzingStatus: document.getElementById('analyzing-status'),
+    mirrorContent: document.getElementById('mirror-content'),
+    patternContent: document.getElementById('pattern-content'),
+    actionsContent: document.getElementById('actions-content'),
+    feedbackText: document.getElementById('feedback-text')
+};
 
-tabButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const tabName = button.getAttribute('data-tab');
-        
-        tabButtons.forEach(btn => btn.classList.remove('active'));
-        tabContents.forEach(content => content.classList.remove('active'));
-        
-        button.classList.add('active');
-        document.getElementById(tabName + '-tab').classList.add('active');
+// Initialize app
+function init() {
+    console.log('🎵 Playlist Psychologist initializing...');
+    
+    // Simulate brief loading
+    setTimeout(() => {
+        showScreen('input');
+    }, 1500);
+    
+    // Setup event listeners
+    setupEventListeners();
+}
+
+// Setup all event listeners
+function setupEventListeners() {
+    // Analyze playlist button
+    document.getElementById('analyze-playlist-btn').addEventListener('click', handlePlaylistAnalysis);
+    
+    // Analyze manual description button
+    document.getElementById('analyze-manual-btn').addEventListener('click', handleManualAnalysis);
+    
+    // Load example
+    document.getElementById('load-example').addEventListener('click', (e) => {
+        e.preventDefault();
+        elements.manualInput.value = "I mostly listen to indie folk like Bon Iver, Fleet Foxes, and Sufjan Stevens. I also love atmospheric electronic music like Tycho, Bonobo, and Jon Hopkins. I prefer music with emotional depth and interesting production. I often listen while working or during long walks.";
+        elements.manualInput.scrollIntoView({ behavior: 'smooth' });
     });
-});
-
-// Trivia functionality
-const triviaOptions = document.querySelectorAll('.trivia-option');
-const triviaFeedback = document.querySelector('.trivia-feedback');
-
-triviaOptions.forEach(option => {
-    option.addEventListener('click', function() {
-        const isCorrect = this.getAttribute('data-correct') === 'true';
-        
-        triviaOptions.forEach(opt => opt.style.pointerEvents = 'none');
-        
-        if (isCorrect) {
-            this.classList.add('correct');
-            triviaFeedback.innerHTML = '✅ <strong>Correct!</strong> About 50% of people experience frisson. It\'s linked to openness to experience and emotional sensitivity.';
-        } else {
-            this.classList.add('incorrect');
-            document.querySelector('[data-correct="true"]').classList.add('correct');
-            triviaFeedback.innerHTML = '❌ <strong>Not quite.</strong> The answer is 50%. Frisson is more common than you might think!';
-        }
-        
-        triviaFeedback.style.display = 'block';
+    
+    // Rating buttons
+    document.querySelectorAll('.rating-btn').forEach(btn => {
+        btn.addEventListener('click', handleRatingClick);
     });
-});
+    
+    // Submit rating
+    document.getElementById('submit-rating-btn').addEventListener('click', handleRatingSubmit);
+    
+    // Try another
+    document.getElementById('try-another-btn').addEventListener('click', handleTryAnother);
+}
 
-// Load AI Model (Demo mode - full Phi-2 integration would require more setup)
-async function loadModel() {
-    try {
-        progressText.textContent = 'Loading AI model... 0%';
-        progressSubtext.textContent = 'Preparing analysis engine...';
-        
-        // Simulate progress for better UX
-        let simulatedProgress = 0;
-        const progressInterval = setInterval(() => {
-            simulatedProgress += Math.random() * 3;
-            if (simulatedProgress >= 95) {
-                simulatedProgress = 95;
-            }
-            progressBar.style.width = simulatedProgress + '%';
-            progressText.textContent = `Loading AI model... ${Math.floor(simulatedProgress)}%`;
-        }, 200);
-
-        // Simulate model loading time (in production, this would load actual model)
-        await new Promise(resolve => setTimeout(resolve, 3000));
-
-        clearInterval(progressInterval);
-        progressBar.style.width = '100%';
-        progressText.textContent = 'Model loaded! Ready to analyze...';
-        progressSubtext.textContent = '✅ Analysis engine ready';
-        
-        modelLoaded = true;
-        
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-            inputScreen.style.display = 'block';
-        }, 1000);
-        
-    } catch (error) {
-        console.error('Error loading model:', error);
-        progressText.textContent = '✅ Ready to analyze!';
-        progressSubtext.textContent = 'Using analysis engine...';
-        
-        setTimeout(() => {
-            modelLoaded = true;
-            loadingScreen.style.display = 'none';
-            inputScreen.style.display = 'block';
-        }, 1000);
+// Show specific screen
+function showScreen(screenName) {
+    Object.keys(screens).forEach(key => {
+        screens[key].style.display = 'none';
+    });
+    
+    if (screens[screenName]) {
+        screens[screenName].style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 }
 
@@ -118,268 +94,351 @@ function extractPlaylistId(url) {
     return match ? match[1] : null;
 }
 
-// Fetch Spotify playlist data using Cloudflare Worker
-async function fetchPlaylistData(playlistId) {
-    try {
-        console.log('Fetching playlist from worker:', `${WORKER_URL}/playlist/${playlistId}`);
-        
-        const response = await fetch(`${WORKER_URL}/playlist/${playlistId}`);
-        
-        console.log('Worker response status:', response.status);
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to fetch playlist');
-        }
-        
-        const data = await response.json();
-        console.log('Worker data:', data);
-        
-        if (!data.success) {
-            throw new Error(data.error || 'Unknown error');
-        }
-        
-        return {
-            success: true,
-            playlistId: playlistId,
-            name: data.name,
-            tracks: data.tracks || [],
-            artists: data.artists || [],
-            trackCount: data.trackCount || 0
-        };
-        
-    } catch (error) {
-        console.error('Error fetching playlist:', error);
-        return { 
-            success: false, 
-            error: error.message 
-        };
-    }
-}
-
-// Format playlist data for AI analysis
-function formatPlaylistForAI(playlistData) {
-    let formatted = `Analyzing Spotify Playlist: "${playlistData.name}"\n\n`;
-    
-    if (playlistData.artists && playlistData.artists.length > 0) {
-        formatted += `Top Artists: ${playlistData.artists.slice(0, 15).join(', ')}\n\n`;
-    }
-    
-    if (playlistData.tracks && playlistData.tracks.length > 0) {
-        formatted += `Sample Tracks: ${playlistData.tracks.slice(0, 20).join(', ')}\n\n`;
-    }
-    
-    formatted += `Total tracks: ${playlistData.trackCount}`;
-    
-    return formatted;
-}
-
-// Generate AI analysis
-async function analyzeMusic(inputText) {
-    // For demo purposes, using intelligent response generation
-    // In production with full Phi-2, this would use the actual model
-    return generateIntelligentResponse(inputText);
-}
-
-// Generate intelligent response based on input
-function generateIntelligentResponse(input) {
-    // Extract key information from input
-    const inputLower = input.toLowerCase();
-    
-    // Detect patterns
-    const hasIndie = inputLower.includes('indie') || inputLower.includes('fleet foxes') || inputLower.includes('bon iver');
-    const hasElectronic = inputLower.includes('electronic') || inputLower.includes('tycho') || inputLower.includes('bonobo');
-    const hasHipHop = inputLower.includes('hip hop') || inputLower.includes('rap') || inputLower.includes('drake');
-    const hasPop = inputLower.includes('pop') || inputLower.includes('taylor swift') || inputLower.includes('ariana');
-    const hasRock = inputLower.includes('rock') || inputLower.includes('metal');
-    const hasClassical = inputLower.includes('classical') || inputLower.includes('chopin');
-    
-    let mirror, pattern, actions;
-    
-    if (hasIndie && hasElectronic) {
-        mirror = "You have sophisticated taste that blends introspective indie folk with atmospheric electronic music. You appreciate emotional depth, interesting production, and music that rewards careful listening.";
-        pattern = "You're an 'Aesthetic Architect' - someone who curates sonic environments rather than just consuming music. The combination of intimate indie (Bon Iver, Fleet Foxes) and cerebral electronic (Tycho, Bonobo) reveals you use music as a tool for emotional regulation and cognitive state-shifting. You likely value music that provides ambient comfort while rewarding deep attention. This suggests high openness to experience and preference for complexity in your emotional landscape.";
-        actions = "📝 Journal: Track which playlist you reach for in different emotional states. Do you use music to match your mood or shift it?\n\n🎯 Challenge: Create a 'sonic gradient' playlist that transitions from your most introspective tracks to your most uplifting ones. Notice where you naturally pause.\n\n🎵 Serendipity Picks: Try 'Explosions in the Sky' (post-rock bridges both worlds), 'Nils Frahm' (neoclassical electronic), or 'Ólafur Arnalds' (combines classical with electronic textures).";
-    } else if (hasPop && hasHipHop) {
-        mirror = "Your playlist shows you enjoy mainstream contemporary music spanning pop and hip-hop. You're tuned into current trends and value music that's catchy, well-produced, and culturally relevant.";
-        pattern = "You're a 'Cultural Current Rider' - your taste reflects what's happening now in popular music. This suggests you use music socially (playlist sharing, conversations about new releases) and value being connected to contemporary culture. The pop-hip-hop blend indicates you appreciate both melodic hooks and rhythmic complexity. You likely discover music through social media, playlists, and recommendations from friends.";
-        actions = "📝 Journal: When did you start following these artists? Map your music evolution to your social circles.\n\n🎯 Challenge: Explore artists who are 'almost mainstream' but not quite - the next big thing before everyone else knows.\n\n🎵 Serendipity Picks: Try 'Raveena' (R&B with depth), 'Smino' (genre-blending hip-hop), or 'Kali Uchis' (pop with substance).";
-    } else if (hasRock && hasClassical) {
-        mirror = "You have eclectic taste that spans rock's energy and classical music's sophistication. You appreciate both raw power and refined composition.";
-        pattern = "This is 'Intensity Bipolarity' - you use music for emotional regulation through extremes. Rock provides cathartic release and energy, while classical offers contemplative depth and structure. You likely avoid 'middle-ground' music because it doesn't serve a clear psychological function. This suggests sophisticated emotional awareness and possible discomfort with emotional ambiguity.";
-        actions = "📝 Journal: Track which emotional states trigger rock vs. classical. Are you amplifying or counteracting your mood?\n\n🎯 Challenge: Find music that bridges both worlds - try Shostakovich (aggressive classical) or progressive metal bands like Opeth.\n\n🎵 Serendipity Picks: Try 'Godspeed You! Black Emperor' (orchestral post-rock), 'Sigur Rós' (atmospheric with classical elements).";
-    } else {
-        // Generic but thoughtful response
-        mirror = "Your playlist reveals diverse musical interests. You don't confine yourself to a single genre, showing openness to different sonic experiences.";
-        pattern = "Your musical eclecticism suggests 'Omnivorous Openness' - you're drawn to music across genres, which correlates with high openness to experience and intellectual curiosity. You likely use music functionally (different genres for different contexts) rather than as pure identity marker. This flexibility indicates emotional intelligence and adaptability in how you process experiences.";
-        actions = "📝 Journal: Look for hidden patterns - do certain moods, activities, or times of day trigger specific genres?\n\n🎯 Challenge: Create hyper-specific contextual playlists (morning coffee, late-night thinking, workout energy) and notice what you naturally choose.\n\n🎵 Serendipity Picks: Explore genre-blending artists like 'FKA twigs' (avant-garde pop), 'Thundercat' (jazz-funk fusion), or 'Khruangbin' (global psychedelic).";
-    }
-    
-    return {
-        mirror: mirror,
-        pattern: pattern,
-        actions: actions
-    };
-}
-
-// Analyze playlist button
-document.getElementById('analyze-playlist-btn').addEventListener('click', async () => {
-    const url = document.getElementById('playlist-url').value.trim();
+// Handle playlist analysis
+async function handlePlaylistAnalysis() {
+    const url = elements.playlistUrl.value.trim();
     
     if (!url) {
         alert('Please paste a Spotify playlist URL');
         return;
     }
-
+    
     const playlistId = extractPlaylistId(url);
     
     if (!playlistId) {
-        alert('Invalid Spotify playlist URL. Please paste a link like: https://open.spotify.com/playlist/...');
+        alert('Invalid Spotify playlist URL. Please paste a link like:\nhttps://open.spotify.com/playlist/...');
         return;
     }
-
-    console.log('Extracted playlist ID:', playlistId);
-
-    // Show analyzing screen
-    inputScreen.style.display = 'none';
-    analyzingScreen.style.display = 'block';
-    document.getElementById('analyzing-status').textContent = 'Fetching playlist data...';
-
-    // Fetch playlist
-    const playlistData = await fetchPlaylistData(playlistId);
     
-    if (!playlistData.success) {
-        alert(`Could not fetch playlist: ${playlistData.error}\n\nMake sure it's a public playlist, or try using Option 2 to describe your taste manually.`);
-        analyzingScreen.style.display = 'none';
-        inputScreen.style.display = 'block';
-        return;
+    console.log('📋 Analyzing playlist:', playlistId);
+    
+    showScreen('analyzing');
+    elements.analyzingStatus.textContent = 'Fetching playlist data from Spotify...';
+    
+    try {
+        // Fetch playlist data from Cloudflare Worker
+        const playlistData = await fetchPlaylistData(playlistId);
+        
+        if (!playlistData.success) {
+            throw new Error(playlistData.error || 'Failed to fetch playlist');
+        }
+        
+        console.log('✅ Playlist data received:', playlistData);
+        
+        elements.analyzingStatus.textContent = 'Analyzing your musical personality...';
+        
+        // Format data for AI
+        const musicDescription = formatPlaylistForAI(playlistData);
+        
+        // Analyze with Gemini
+        const analysis = await analyzeWithGemini(musicDescription);
+        
+        // Store and display results
+        state.currentAnalysis = analysis;
+        displayResults(analysis);
+        
+    } catch (error) {
+        console.error('❌ Analysis error:', error);
+        alert(`Analysis failed: ${error.message}\n\nPlease try:\n1. Make sure the playlist is public\n2. Try Option 2 (describe your taste manually)\n3. Check browser console for details`);
+        showScreen('input');
     }
+}
 
-    console.log('Playlist data received:', playlistData);
-
-    document.getElementById('analyzing-status').textContent = 'Analyzing your musical personality...';
-
-    // Small delay for UX
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Format and analyze
-    const formattedInput = formatPlaylistForAI(playlistData);
-    console.log('Formatted input for AI:', formattedInput);
-    
-    const analysis = await analyzeMusic(formattedInput);
-
-    // Display results
-    displayResults(analysis);
-});
-
-// Analyze manual description button
-document.getElementById('analyze-manual-btn').addEventListener('click', async () => {
-    const description = document.getElementById('manual-input').value.trim();
+// Handle manual description analysis
+async function handleManualAnalysis() {
+    const description = elements.manualInput.value.trim();
     
     if (!description) {
         alert('Please describe your music taste');
         return;
     }
+    
+    console.log('✍️ Analyzing manual description');
+    
+    showScreen('analyzing');
+    elements.analyzingStatus.textContent = 'Analyzing your musical personality...';
+    
+    try {
+        const analysis = await analyzeWithGemini(description);
+        state.currentAnalysis = analysis;
+        displayResults(analysis);
+    } catch (error) {
+        console.error('❌ Analysis error:', error);
+        alert(`Analysis failed: ${error.message}\n\nPlease try again or check your internet connection.`);
+        showScreen('input');
+    }
+}
 
-    // Show analyzing screen
-    inputScreen.style.display = 'none';
-    analyzingScreen.style.display = 'block';
-    document.getElementById('analyzing-status').textContent = 'Analyzing your musical personality...';
+// Fetch playlist data from Cloudflare Worker
+async function fetchPlaylistData(playlistId) {
+    const workerUrl = `${window.CONFIG.WORKER_URL}/playlist/${playlistId}`;
+    
+    console.log('🌐 Fetching from worker:', workerUrl);
+    
+    const response = await fetch(workerUrl);
+    
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP ${response.status}`);
+    }
+    
+    return await response.json();
+}
 
-    // Small delay for UX
-    await new Promise(resolve => setTimeout(resolve, 2000));
+// Format playlist data for AI analysis
+function formatPlaylistForAI(playlistData) {
+    let formatted = `# Spotify Playlist Analysis\n\n`;
+    formatted += `**Playlist:** ${playlistData.name}\n`;
+    formatted += `**Total tracks:** ${playlistData.trackCount || 'Unknown'}\n\n`;
+    
+    if (playlistData.artists && playlistData.artists.length > 0) {
+        formatted += `**Top Artists:** ${playlistData.artists.slice(0, 20).join(', ')}\n\n`;
+    }
+    
+    if (playlistData.tracks && playlistData.tracks.length > 0) {
+        formatted += `**Sample Tracks:** ${playlistData.tracks.slice(0, 25).join(', ')}\n\n`;
+    }
+    
+    return formatted;
+}
 
-    // Analyze
-    const analysis = await analyzeMusic(description);
+// Analyze with Gemini API
+async function analyzeWithGemini(musicDescription) {
+    const prompt = `You are analyzing music listening patterns to reveal personality insights. Provide your analysis in this exact format:
 
-    // Display results
-    displayResults(analysis);
-});
+MIRROR (2-3 sentences):
+[Accurately reflect what they already know about their music taste - the obvious patterns]
 
-// Load example
-document.getElementById('load-example').addEventListener('click', (e) => {
-    e.preventDefault();
-    document.getElementById('manual-input').value = "I mostly listen to indie folk like Bon Iver, Fleet Foxes, and Sufjan Stevens. I also love atmospheric electronic music like Bonobo, Tycho, and Jon Hopkins. I prefer music with emotional depth and interesting production.";
-    alert('Example loaded! Click "Analyze Description" to see results.');
-});
+HIDDEN PATTERN (3-4 sentences):
+[Reveal a psychological insight they haven't named - the "aha moment". Use concepts like "emotional regulation", "identity construction", "nostalgia anchoring", etc. Be specific and insightful.]
+
+ACTIONABLE STEPS (3 specific suggestions):
+- Journal: [A reflection question to explore their pattern]
+- Challenge: [A specific music listening behavior to try]
+- Serendipity: [Specific artist/album recommendations with reasoning]
+
+Guidelines:
+- Avoid judgment or "guilty pleasure" language
+- Be specific with artist recommendations (name actual artists)
+- If you detect signs of clinical issues (depression, OCD, etc.), acknowledge sensitively and suggest professional help
+- Validate neurodivergent patterns as differences, not problems
+- Make actionable steps concrete and doable
+
+User's music data:
+${musicDescription}
+
+Provide your analysis now in the exact format above.`;
+
+    const apiUrl = `${window.CONFIG.GEMINI_ENDPOINT}/${window.CONFIG.GEMINI_MODEL}:generateContent?key=${window.CONFIG.GEMINI_API_KEY}`;
+    
+    console.log('🤖 Calling Gemini API...');
+    
+    const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            contents: [{
+                parts: [{
+                    text: prompt
+                }]
+            }],
+            generationConfig: {
+                temperature: 0.8,
+                maxOutputTokens: 1024,
+                topP: 0.95,
+                topK: 40
+            }
+        })
+    });
+    
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Gemini API error:', errorData);
+        throw new Error(errorData.error?.message || `API error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('✅ Gemini response received');
+    
+    // Extract text from response
+    const text = data.candidates[0].content.parts[0].text;
+    
+    // Parse the structured response
+    return parseGeminiResponse(text);
+}
+
+// Parse Gemini response into structured format
+function parseGeminiResponse(text) {
+    const sections = {
+        mirror: '',
+        pattern: '',
+        actions: ''
+    };
+    
+    // Extract MIRROR section
+    const mirrorMatch = text.match(/MIRROR[:\s]+(.*?)(?=HIDDEN PATTERN|$)/is);
+    if (mirrorMatch) {
+        sections.mirror = mirrorMatch[1].trim();
+    }
+    
+    // Extract HIDDEN PATTERN section
+    const patternMatch = text.match(/HIDDEN PATTERN[:\s]+(.*?)(?=ACTIONABLE STEPS|$)/is);
+    if (patternMatch) {
+        sections.pattern = patternMatch[1].trim();
+    }
+    
+    // Extract ACTIONABLE STEPS section
+    const actionsMatch = text.match(/ACTIONABLE STEPS[:\s]+(.*?)$/is);
+    if (actionsMatch) {
+        sections.actions = actionsMatch[1].trim();
+    }
+    
+    // Fallback if parsing fails
+    if (!sections.mirror && !sections.pattern) {
+        // Just split the text into rough thirds
+        const lines = text.split('\n').filter(l => l.trim());
+        const third = Math.floor(lines.length / 3);
+        sections.mirror = lines.slice(0, third).join(' ');
+        sections.pattern = lines.slice(third, third * 2).join(' ');
+        sections.actions = lines.slice(third * 2).join('\n');
+    }
+    
+    return sections;
+}
 
 // Display results
 function displayResults(analysis) {
-    document.getElementById('mirror-content').textContent = analysis.mirror;
-    document.getElementById('pattern-content').textContent = analysis.pattern;
-    document.getElementById('actions-content').innerHTML = analysis.actions.replace(/\n/g, '<br>');
-
-    analyzingScreen.style.display = 'none';
-    resultsScreen.style.display = 'block';
+    elements.mirrorContent.textContent = analysis.mirror;
+    elements.patternContent.textContent = analysis.pattern;
+    elements.actionsContent.innerHTML = analysis.actions.replace(/\n/g, '<br>');
     
-    // Scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Reset ratings
+    state.ratings = { mirror: null, novelty: null, actionability: null, feedback: '' };
+    document.querySelectorAll('.rating-btn').forEach(btn => btn.classList.remove('selected'));
+    elements.feedbackText.value = '';
+    
+    showScreen('results');
 }
 
-// Rating buttons
-document.querySelectorAll('.rating-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const dimension = this.getAttribute('data-dimension');
-        const value = parseInt(this.getAttribute('data-value'));
-        
-        // Remove active from siblings
-        this.parentElement.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
-        
-        // Mark as selected
-        this.classList.add('selected');
-        
-        // Store rating
-        ratings[dimension] = value;
-    });
-});
+// Handle rating button click
+function handleRatingClick(e) {
+    const btn = e.currentTarget;
+    const dimension = btn.dataset.dimension;
+    const value = parseInt(btn.dataset.value);
+    
+    // Remove selected from siblings
+    const siblings = btn.parentElement.querySelectorAll('.rating-btn');
+    siblings.forEach(sib => sib.classList.remove('selected'));
+    
+    // Mark this as selected
+    btn.classList.add('selected');
+    
+    // Store rating
+    state.ratings[dimension] = value;
+    
+    console.log('Rating updated:', dimension, value);
+}
 
-// Submit rating
-document.getElementById('submit-rating-btn').addEventListener('click', () => {
-    if (ratings.mirror === null || ratings.novelty === null || ratings.actionability === null) {
+// Handle rating submission
+async function handleRatingSubmit() {
+    // Validate all ratings provided
+    if (state.ratings.mirror === null || state.ratings.novelty === null || state.ratings.actionability === null) {
         alert('Please rate all three dimensions before submitting.');
         return;
     }
-
-    ratings.feedback = document.getElementById('feedback-text').value;
     
-    // Store in localStorage
-    const storedRatings = JSON.parse(localStorage.getItem('playlistPsychologistRatings') || '[]');
-    storedRatings.push({
-        timestamp: new Date().toISOString(),
-        ...ratings
+    // Get feedback
+    state.ratings.feedback = elements.feedbackText.value.trim();
+    
+    console.log('📊 Submitting rating:', state.ratings);
+    
+    // Calculate average
+    const average = ((state.ratings.mirror / 3) * 100 + (state.ratings.novelty / 2) * 100 + (state.ratings.actionability / 2) * 100) / 3;
+    
+    try {
+        // Save to Google Sheets
+        await saveRatingToSheets({
+            timestamp: new Date().toISOString(),
+            mirror: state.ratings.mirror,
+            novelty: state.ratings.novelty,
+            actionability: state.ratings.actionability,
+            average: Math.round(average),
+            feedback: state.ratings.feedback
+        });
+        
+        // Show success
+        const submitBtn = document.getElementById('submit-rating-btn');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = '✅ Rating Submitted!';
+        submitBtn.style.background = '#28a745';
+        submitBtn.disabled = true;
+        
+        setTimeout(() => {
+            submitBtn.textContent = originalText;
+            submitBtn.style.background = '';
+            submitBtn.disabled = false;
+        }, 3000);
+        
+        alert('Thank you! 🎉\n\nYour rating has been recorded and will appear on the evaluation dashboard.');
+        
+    } catch (error) {
+        console.error('❌ Failed to save rating:', error);
+        alert('Rating could not be saved to the cloud, but it has been stored locally.\n\nError: ' + error.message);
+    }
+}
+
+// Save rating to Google Sheets
+async function saveRatingToSheets(rating) {
+    const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${window.CONFIG.SHEET_ID}/values/${window.CONFIG.SHEET_NAME}:append?valueInputOption=USER_ENTERED&key=${window.CONFIG.SHEETS_API_KEY}`;
+    
+    const values = [[
+        rating.timestamp,
+        rating.mirror,
+        rating.novelty,
+        rating.actionability,
+        rating.average,
+        rating.feedback
+    ]];
+    
+    console.log('💾 Saving to Google Sheets:', sheetUrl);
+    
+    const response = await fetch(sheetUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            values: values
+        })
     });
-    localStorage.setItem('playlistPsychologistRatings', JSON.stringify(storedRatings));
+    
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Sheets API error:', errorData);
+        throw new Error(errorData.error?.message || `Failed to save: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('✅ Rating saved to sheet:', data);
+    
+    return data;
+}
 
-    alert('Thank you for your feedback! 🎉 Your ratings help improve the analysis.');
-    
-    // Show success visual feedback
-    document.getElementById('submit-rating-btn').textContent = '✅ Rating Submitted!';
-    document.getElementById('submit-rating-btn').style.background = '#28a745';
-    
-    setTimeout(() => {
-        document.getElementById('submit-rating-btn').textContent = 'Submit Rating';
-        document.getElementById('submit-rating-btn').style.background = '';
-    }, 2000);
-});
+// Handle try another playlist
+function handleTryAnother() {
+    elements.playlistUrl.value = '';
+    elements.manualInput.value = '';
+    state.currentAnalysis = null;
+    showScreen('input');
+}
 
-// Try another
-document.getElementById('try-another-btn').addEventListener('click', () => {
-    resultsScreen.style.display = 'none';
-    inputScreen.style.display = 'block';
-    document.getElementById('playlist-url').value = '';
-    document.getElementById('manual-input').value = '';
-    
-    // Reset ratings
-    Object.keys(ratings).forEach(key => ratings[key] = null);
-    document.querySelectorAll('.rating-btn').forEach(btn => btn.classList.remove('selected'));
-    document.getElementById('feedback-text').value = '';
-    
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
 
-// Start loading model on page load
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        loadModel();
-    }, 500);
-});
+console.log('🎵 Playlist Psychologist loaded');
