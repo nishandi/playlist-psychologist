@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluation Dashboard - Playlist Psychologist</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="config.js"></script>
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-container">
+        
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1>📊 Evaluation Dashboard</h1>
+                <p class="header-subtitle">Comprehensive evaluation of AI music personality analysis</p>
+                <div class="header-actions">
+                    <a href="index.html" class="back-link">← Back to App</a>
+                    <a href="https://github.com/nishandi/playlist-psychologist" target="_blank" class="github-link">💻 GitHub</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Summary Cards -->
+        <div class="summary-section">
+            <h2>Overall Performance</h2>
+            <p class="section-subtitle">Based on expert evaluation of 20 diverse examples</p>
+            
+            <div class="metrics-grid">
+                <div class="metric-card mirror-card">
+                    <div class="metric-icon">🪞</div>
+                    <div class="metric-value">100%</div>
+                    <div class="metric-label">Mirror Accuracy</div>
+                    <div class="metric-desc">AI correctly understood user behavior in all cases</div>
+                </div>
+                
+                <div class="metric-card novelty-card">
+                    <div class="metric-icon">💡</div>
+                    <div class="metric-value">97.5%</div>
+                    <div class="metric-label">Insight Novelty</div>
+                    <div class="metric-desc">Revealed patterns users didn't self-identify</div>
+                </div>
+                
+                <div class="metric-card action-card">
+                    <div class="metric-icon">✨</div>
+                    <div class="metric-value">95%</div>
+                    <div class="metric-label">Actionability</div>
+                    <div class="metric-desc">Provided specific, useful recommendations</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance by Difficulty -->
+        <div class="analysis-section">
+            <h2>Performance by Difficulty</h2>
+            <div class="table-container">
+                <table class="performance-table">
+                    <thead>
+                        <tr>
+                            <th>Difficulty</th>
+                            <th>Count</th>
+                            <th>Mirror Accuracy</th>
+                            <th>Novelty Score</th>
+                            <th>Actionability</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="difficulty-badge easy">Easy</span></td>
+                            <td>3</td>
+                            <td><span class="score excellent">100%</span></td>
+                            <td><span class="score excellent">83%</span></td>
+                            <td><span class="score excellent">100%</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="difficulty-badge medium">Medium</span></td>
+                            <td>12</td>
+                            <td><span class="score excellent">100%</span></td>
+                            <td><span class="score excellent">100%</span></td>
+                            <td><span class="score excellent">96%</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="difficulty-badge hard">Hard</span></td>
+                            <td>5</td>
+                            <td><span class="score excellent">100%</span></td>
+                            <td><span class="score excellent">100%</span></td>
+                            <td><span class="score good">90%</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Performance by Category -->
+        <div class="analysis-section">
+            <h2>Performance by Category</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <h4>😊 Emotional/Psychological</h4>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <span class="stat-label">Count:</span>
+                            <span class="stat-value">6</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Accuracy:</span>
+                            <span class="stat-value">100%</span>
+                        </div>
+                    </div>
+                    <p class="category-note">Strong emotional pattern recognition</p>
+                </div>
+
+                <div class="category-card">
+                    <h4>🧠 Neurodivergent/Neurological</h4>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <span class="stat-label">Count:</span>
+                            <span class="stat-value">3</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Accuracy:</span>
+                            <span class="stat-value">100%</span>
+                        </div>
+                    </div>
+                    <p class="category-note">No pathologizing, validated differences</p>
+                </div>
+
+                <div class="category-card">
+                    <h4>⚙️ Functional/Practical</h4>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <span class="stat-label">Count:</span>
+                            <span class="stat-value">3</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Accuracy:</span>
+                            <span class="stat-value">100%</span>
+                        </div>
+                    </div>
+                    <p class="category-note">Understood music as tool</p>
+                </div>
+
+                <div class="category-card">
+                    <h4>🏥 Clinical Boundaries</h4>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <span class="stat-label">Count:</span>
+                            <span class="stat-value">2</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Accuracy:</span>
+                            <span class="stat-value">100%</span>
+                        </div>
+                    </div>
+                    <p class="category-note">Perfect graceful failure</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Findings -->
+        <div class="findings-section">
+            <div class="findings-grid">
+                <div class="finding-card strengths">
+                    <h3>✅ Key Strengths</h3>
+                    <ul>
+                        <li>Perfect mirror accuracy (100%) - builds trust</li>
+                        <li>Exceptional insight novelty (97.5%) - genuine value-add</li>
+                        <li>High actionability (95%) - specific recommendations</li>
+                        <li>Appropriate clinical boundary recognition</li>
+                        <li>No neurodivergent pathologizing</li>
+                        <li>Cultural and identity sensitivity</li>
+                    </ul>
+                </div>
+
+                <div class="finding-card improvements">
+                    <h3>📈 Areas for Enhancement</h3>
+                    <ul>
+                        <li>Slightly lower actionability on ambiguous cases (appropriate caution)</li>
+                        <li>Minor verbosity in some pattern explanations</li>
+                        <li>Could add more non-Western cultural contexts</li>
+                    </ul>
+                    <p class="improvement-note">Note: These are minor refinements. Overall performance exceeds expectations.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Ratings Section -->
+        <div class="user-ratings-section">
+            <h2>Live User Ratings</h2>
+            <p class="section-subtitle">Real-time feedback from users who've tried the analysis</p>
+            
+            <div id="user-ratings-container">
+                <div class="loading-ratings">
+                    <div class="spinner small"></div>
+                    <p>Loading user ratings...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Methodology -->
+        <div class="methodology-section">
+            <h2>Evaluation Methodology</h2>
+            <div class="methodology-content">
+                <div class="method-card">
+                    <h4>📊 Dataset</h4>
+                    <p>100 diverse examples (50 synthetic + 50 real-world from Reddit/Twitter)</p>
+                </div>
+                <div class="method-card">
+                    <h4>📏 Scoring Dimensions</h4>
+                    <p>Mirror Accuracy (0-100%) + Insight Novelty (0-2pts) + Actionability (0-2pts)</p>
+                </div>
+                <div class="method-card">
+                    <h4>🎯 Evaluated Subset</h4>
+                    <p>20 representative examples tested with Claude 3.5 Sonnet</p>
+                </div>
+                <div class="method-card">
+                    <h4>✅ Quality Controls</h4>
+                    <p>Independent scoring, edge case focus, ambiguity tolerance</p>
+                </div>
+            </div>
+            
+            <div class="methodology-link">
+                <a href="evaluation_methodology.md" class="read-more">📄 Read Full Methodology</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="dashboard-footer">
+            <p>Built as a portfolio project demonstrating comprehensive AI evaluation methodology</p>
+            <p class="footer-links">
+                <a href="index.html">Try the App</a> • 
+                <a href="evaluation_methodology.md">Full Methodology</a> • 
+                <a href="https://github.com/nishandi/playlist-psychologist">GitHub Repository</a>
+            </p>
+        </footer>
+
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
