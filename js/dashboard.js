@@ -1,28 +1,48 @@
-// Dashboard - Load ratings from Google Sheets
+// Dashboard - fetches ratings using public sheet access
 
 async function loadUserRatings() {
     const container = document.getElementById('user-ratings-container');
     
     try {
-        // Use public read URL (sheet must be set to "Anyone with link can view")
-        const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${window.CONFIG.SHEET_ID}/values/Sheet1?key=AIzaSyBAuhSSzBIxdFZbyWAWpmURQyD2MZC_Ptw`;
+        // Use Google Sheets public JSON endpoint (no API key needed)
+        const sheetId = '1HBA-4GzSj_6No8H8UeQ947fmiGAvczlByCaudCSj7yU';
+        const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=Sheet1`;
         
-        console.log('📊 Fetching ratings from sheet...');
+        console.log('📊 Fetching user ratings from:', sheetUrl);
         
         const response = await fetch(sheetUrl);
         
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Sheet fetch error:', errorText);
-            throw new Error(`Failed to load ratings: ${response.status}`);
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
         
-        const data = await response.json();
-        console.log('✅ Sheet data received:', data);
+        const text = await response.text();
         
-        const rows = (data.values || []).slice(1); // Skip header row
+        // Google returns JSONP, need to extract JSON
+        const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\((.*)\);/);
+        if (!jsonMatch) {
+            throw new Error('Could not parse Google Sheets response');
+        }
         
-        if (rows.length === 0) {
+        const data = JSON.parse(jsonMatch[1]);
+        
+        if (!data.table || !data.table.rows) {
+            throw new Error('No data in sheet');
+        }
+        
+        const rows = data.table.rows;
+        
+        // Skip header row if it exists (check if first row looks like header)
+        let dataRows = rows;
+        if (rows.length > 0 && rows[0].c) {
+            const firstRow = rows[0].c.map(cell => cell?.v || '');
+            // If first row contains "Timestamp", "Mirror", etc, skip it
+            if (firstRow.some(val => ['timestamp', 'mirror', 'novelty'].includes(String(val).toLowerCase()))) {
+                dataRows = rows.slice(1);
+            }
+        }
+        
+        if (dataRows.length === 0) {
             container.innerHTML = `
                 <div class="no-ratings">
                     <p>📊 No user ratings yet!</p>
@@ -32,10 +52,17 @@ async function loadUserRatings() {
             return;
         }
         
-        console.log(`Found ${rows.length} ratings`);
+        // Convert Google Sheets format to simple arrays
+        const ratings = dataRows.map(row => {
+            return row.c ? row.c.map(cell => cell?.v || '') : [];
+        });
         
-        const stats = calculateStats(rows);
+        console.log('✅ Loaded ratings:', ratings.length);
         
+        // Calculate stats
+        const stats = calculateStats(ratings);
+        
+        // Display stats
         container.innerHTML = `
             <div class="user-stats-grid">
                 <div class="user-stat-card">
@@ -48,7 +75,7 @@ async function loadUserRatings() {
                 </div>
                 <div class="user-stat-card">
                     <div class="user-stat-value">${stats.avgNovelty}%</div>
-                    <div class="user-stat-label">Avg Insight Novelty</div>
+                    <div class="user-stat-label">Avg Novelty</div>
                 </div>
                 <div class="user-stat-card">
                     <div class="user-stat-value">${stats.avgActionability}%</div>
@@ -57,8 +84,8 @@ async function loadUserRatings() {
             </div>
             
             <div class="recent-ratings">
-                <h3>Recent Feedback (${rows.length} total)</h3>
-                ${displayRecentRatings(rows.slice(0, 10))}
+                <h3>Recent Feedback</h3>
+                ${displayRecentRatings(ratings.slice(0, 5))}
             </div>
         `;
         
@@ -68,25 +95,34 @@ async function loadUserRatings() {
             <div class="error-message">
                 <p>⚠️ Could not load user ratings</p>
                 <p class="error-detail">${error.message}</p>
-                <p style="margin-top: 12px; font-size: 0.9em;">Check browser console (F12) for details.</p>
+                <p style="margin-top: 15px; font-size: 0.9em; color: #666;">
+                    <strong>Troubleshooting:</strong><br>
+                    1. Make sure the Google Sheet is shared as "Anyone with the link can view"<br>
+                    2. Check browser console (F12) for details<br>
+                    3. Sheet ID: 1HBA-4GzSj_6No8H8UeQ947fmiGAvczlByCaudCSj7yU
+                </p>
             </div>
         `;
     }
 }
 
 function calculateStats(ratings) {
+    if (!ratings || ratings.length === 0) {
+        return { totalRatings: 0, avgMirror: 0, avgNovelty: 0, avgActionability: 0 };
+    }
+    
     const totalRatings = ratings.length;
     let sumMirror = 0;
     let sumNovelty = 0;
     let sumActionability = 0;
     
     ratings.forEach(row => {
-        const mirror = parseInt(row[1]) || 0; // Column B
-        const novelty = parseInt(row[2]) || 0; // Column C
-        const actionability = parseInt(row[3]) || 0; // Column D
+        // Columns: [timestamp, mirror, novelty, actionability, average, feedback]
+        const mirror = parseFloat(row[1]) || 0;
+        const novelty = parseFloat(row[2]) || 0;
+        const actionability = parseFloat(row[3]) || 0;
         
         // Convert to percentages
-        // Mirror: 0-3 scale, Novelty: 0-2 scale, Actionability: 0-2 scale
         sumMirror += (mirror / 3) * 100;
         sumNovelty += (novelty / 2) * 100;
         sumActionability += (actionability / 2) * 100;
@@ -94,47 +130,43 @@ function calculateStats(ratings) {
     
     return {
         totalRatings,
-        avgMirror: Math.round(sumMirror / totalRatings),
-        avgNovelty: Math.round(sumNovelty / totalRatings),
-        avgActionability: Math.round(sumActionability / totalRatings)
+        avgMirror: Math.round(sumMirror / totalRatings) || 0,
+        avgNovelty: Math.round(sumNovelty / totalRatings) || 0,
+        avgActionability: Math.round(sumActionability / totalRatings) || 0
     };
 }
 
 function displayRecentRatings(recentRatings) {
-    const withFeedback = recentRatings.filter(row => row[5] && row[5].trim());
-    
-    if (withFeedback.length === 0) {
-        return '<p class="no-feedback">No written feedback yet. Ratings are being collected!</p>';
+    if (!recentRatings || recentRatings.length === 0) {
+        return '<p class="no-feedback">No feedback yet</p>';
     }
     
-    return withFeedback
+    const feedbackItems = recentRatings
+        .filter(row => row[5] && String(row[5]).trim()) // Has feedback (column 5)
         .map(row => {
             const timestamp = row[0];
             const feedback = row[5];
-            const mirror = row[1];
-            const novelty = row[2];
-            const actionability = row[3];
             
-            const date = new Date(timestamp);
-            const dateStr = date.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric',
-                year: 'numeric'
-            });
+            let dateStr = 'Recent';
+            try {
+                const date = new Date(timestamp);
+                if (!isNaN(date.getTime())) {
+                    dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                }
+            } catch (e) {
+                console.log('Could not parse date:', timestamp);
+            }
             
             return `
                 <div class="feedback-item">
-                    <div class="feedback-meta">
-                        <span class="feedback-date">${dateStr}</span>
-                        <span class="feedback-scores">
-                            🪞 ${mirror}/3 | 💡 ${novelty}/2 | ✨ ${actionability}/2
-                        </span>
-                    </div>
+                    <div class="feedback-date">${dateStr}</div>
                     <div class="feedback-text">"${feedback}"</div>
                 </div>
             `;
         })
         .join('');
+    
+    return feedbackItems || '<p class="no-feedback">No written feedback yet</p>';
 }
 
 // Load ratings when page loads
