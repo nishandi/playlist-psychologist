@@ -1,10 +1,10 @@
 // API Configuration for Playlist Psychologist
-// Using Gemini API (free tier) + Google Sheets for ratings storage
+// Using Gemini 2.5 Flash (latest stable model) + Google Sheets for ratings storage
 
 const CONFIG = {
     // Gemini API Configuration
     GEMINI_API_KEY: 'AIzaSyDImJ0mPiE4l4HtS0PPMOLTbZsX6kSwPLw',
-    GEMINI_MODEL: 'gemini-2.0-flash-exp', // Fast, high quality, 1M token context
+    GEMINI_MODEL: 'gemini-2.5-flash', // Latest stable: 1M token context, 65K output, thinking capability
     GEMINI_ENDPOINT: 'https://generativelanguage.googleapis.com/v1beta/models',
     
     // Google Sheets Configuration (for storing user ratings)
