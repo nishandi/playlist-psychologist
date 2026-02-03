@@ -1,11 +1,11 @@
----
+
 
 ## Evaluation Philosophy
 
 ### What We're Testing
 
 **Not:** "Is the AI smart?"  
-**Instead:** "Does the AI do what users need it to do?"
+**Instead:** "Does the AI delight the user, does the AI create serendipity, is it useful?"
 
 This evaluation measures:
 - **Accuracy**: Does it understand what users say?
@@ -13,7 +13,7 @@ This evaluation measures:
 - **Usefulness**: Can users act on the recommendations?
 - **Appropriateness**: Does it recognize its own limitations?
 
----
+
 
 ## Dataset Design
 
